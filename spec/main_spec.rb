@@ -1,5 +1,5 @@
 # spec/main_spec.rb
-# rubocop: disable Layout/LineLength
+# rubocop: disable Layout/LineLength, Style/SymbolProc
 require './lib/main.rb'
 
 RSpec.describe Enumerable do
@@ -7,6 +7,8 @@ RSpec.describe Enumerable do
   let(:arr) { [1, 2, 3] }
   let(:range) { Range.new(5, 15) }
   let(:words) { %w[ant bear cat] }
+  let(:my_proc) { proc { |num| num * 2 } }
+  let(:search) { proc { |memo, word| memo.length > word.length ? memo : word } }
 
   #----------my_each method-----------
   describe '#my_each' do
@@ -130,6 +132,46 @@ RSpec.describe Enumerable do
       expect([].my_none?).to be(true)
     end
   end
+
+  #----------my_count-----------
+
+  describe '#my_count' do
+    it 'Returns the number of items in enum through enumeration.' do
+      expect(arr.my_count { |item| item.even? }).to eql(1)
+    end
+
+    it "If an argument is given, the number of items in enum
+      that are equal to item are counted. " do
+      expect(arr.my_count(0)).to eql(0)
+    end
+
+    it 'If a block is given, it counts the number of elements yielding a true value.' do
+      expect(arr.my_count).to eql(arr.length)
+    end
+
+    it 'If a block is given, it counts the number of elements yielding a true value.' do
+      expect(range.my_count).to eql(range.count)
+    end
+  end
+
+  #----------my_map-----------
+  describe '#my_map' do
+    it 'Returns a new array with the results of running block once for every element in enum.' do
+      expect(arr.my_map { |item| item * item }).to eql([1, 4, 9])
+    end
+
+    it 'If no block is given, an enumerator is returned instead.' do
+      expect(arr.my_map). to be_a(Enumerator)
+    end
+
+    it 'Returns a new array with the results of running block once for every element in enum.' do
+      expect(arr.my_map { |item| item * item }).to eql(arr.map { |item| item * item })
+    end
+
+    it 'Returns a new array with the results of running proc once for every element in enum.' do
+      expect([1, 2, 3, 4].my_map(my_proc)).to eql([2, 4, 6, 8])
+    end
+  end
 end
 
-# rubocop: enable Layout/LineLength
+# rubocop: enable Layout/LineLength, Style/SymbolProc

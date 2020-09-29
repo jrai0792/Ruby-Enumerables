@@ -91,16 +91,17 @@ module Enumerable
 
   #----------#my_map-----------
 
-  def my_map(proc = nil)
-    return to_enum unless block_given?
-
-    results = []
-    if proc.nil?
-      my_each { |item| results.push(yield(item)) }
-    else
-      my_each { |item| results.push(proc.call(item)) }
+  def my_map(myproc = nil)
+    new_arr = []
+    my_each do |item|
+      if block_given? && myproc.nil?
+        new_arr.push(yield(item))
+      elsif (block_given? && myproc) || (!block_given? && myproc)
+        new_arr.push(myproc.call(item))
+      else return to_enum(:my_map)
+      end
     end
-    results
+    new_arr
   end
 
   #----------#my_inject-----------
