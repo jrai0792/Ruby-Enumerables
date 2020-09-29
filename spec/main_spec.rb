@@ -4,6 +4,7 @@ RSpec.describe Enumerable do
   include Enumerable
   let(:arr) { [1, 2, 3] }
   let(:range) {Range.new(5, 15) }
+  let(:words) { %w[ant bear cat]}
 
   #----------my_each method-----------
   describe '#my_each' do
@@ -55,6 +56,35 @@ RSpec.describe Enumerable do
 
     it "Returns true if an empty array is passed" do
         expect([].my_all?).to be(true)
+    end
+
+  end
+
+   #----------my_any?-----------
+
+   describe "#my_any?" do
+    it "Passes each element of the collection to the given block.
+     The method returns true if only one item of  the block is true." do
+       expect(words.my_any?{ |word| word.length >= 3}).to be(true)
+     end
+
+    it "If instead a pattern is supplied, the method returns whether 
+        pattern === element for every collection member." do
+          expect(arr.my_any? {Integer}).to be(true)
+    end
+
+    it "If instead a pattern is supplied, the method returns whether 
+        pattern === element for every collection member." do
+          expect(range.my_any? {Integer}).to be(true)
+    end
+
+    it "When no block given, returns true if only one element of the array passed  == argument" do
+          expect(words.my_any?('cat')).to be(true)
+    end
+
+
+    it "Returns false if an empty array is passed" do
+        expect([].my_any?).to be(false)
     end
 
   end
