@@ -35,5 +35,28 @@ RSpec.describe Enumerable do
     end
   end
 
+  #----------my_all?-----------
+
+  describe "#my_all?" do
+    it "Passes each element of the collection to the given block.
+     The method returns true if the block never returns false or nil." do
+       expect(arr.my_all? { |item| item > 0 } ).to be(true)
+     end
+
+    it "If instead a pattern is supplied, the method returns whether 
+        pattern === element for every collection member." do
+          expect(arr.my_all? {Integer}).to be(true)
+    end
+
+    it "If instead a pattern is supplied, the method returns whether 
+        pattern === element for every collection member." do
+          expect(range.my_all? {Integer}).to be(true)
+    end
+
+    it "Returns true if an empty array is passed" do
+        expect([].my_all?).to be(true)
+    end
+
+  end
 
 end
