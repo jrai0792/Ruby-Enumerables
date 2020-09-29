@@ -89,4 +89,22 @@ RSpec.describe Enumerable do
 
   end
 
+  #----------#my_select-----------
+
+  describe "#my_select" do
+    it "Returns an array containing all elements of enum for which 
+        the given block returns a true value." do
+      expect(arr.my_select { |item| item%2 == 0}).to eql([2])
+    end
+
+    it "Returns an array containing all elements of enum for which 
+        the given block returns a true value." do
+      expect(range.my_select { |item| item%2 == 0}).to eql([6,8,10,12,14])
+    end
+
+    it "If no block is given, an Enumerator is returned instead." do
+      expect(arr.my_select). to be_a(Enumerator)
+    end
+  end
+
 end
