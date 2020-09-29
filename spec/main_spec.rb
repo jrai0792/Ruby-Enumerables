@@ -9,6 +9,7 @@ RSpec.describe Enumerable do
   let(:words) { %w[ant bear cat] }
   let(:my_proc) { proc { |num| num * 2 } }
   let(:search) { proc { |memo, word| memo.length > word.length ? memo : word } }
+  let(:my_words) { %w[dog doooooor rod blade] }
 
   #----------my_each method-----------
   describe '#my_each' do
@@ -171,6 +172,36 @@ RSpec.describe Enumerable do
     it 'Returns a new array with the results of running proc once for every element in enum.' do
       expect([1, 2, 3, 4].my_map(my_proc)).to eql([2, 4, 6, 8])
     end
+  end
+
+  #----------my_inject-----------
+
+  describe '#my_inject' do
+    it 'Sums numbers inside an array or range when giving a symbole as argument' do
+      expect((5..10).my_inject(:+)).to eql(45)
+    end
+
+    it 'Sums numbers inside an array or range when giving a block' do
+      expect((5..10).my_inject { |sum, n| sum + n }).to eql(45)
+    end
+
+    it 'Multiply numbers inside an array or range when giving an accumulator and a symbole as argument' do
+      expect((5..10).my_inject(1, :*)).to eql(151_200)
+    end
+
+    it 'Multiply numbers inside an array or range when giving an accumulator and a block' do
+      expect((5..10).my_inject(1) { |product, n| product * n }).to eql(151_200)
+    end
+
+    it 'Accepts and executes a proc to a given array or range ' do
+      expect(my_words.my_inject(&search)).to eql('doooooor')
+    end
+  end
+end
+
+describe '#multiply_els' do
+  it 'Multiply the elements given inside an argument' do
+    expect(multiply_els([2, 4, 5])).to eql(40)
   end
 end
 
